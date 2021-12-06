@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
 using EcommerceApp.Models;
+using EcommerceApp.Services;
+using EcommerceApp.Utils;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using AppContext = EcommerceApp.Models.AppContext;
@@ -34,6 +36,7 @@ namespace EcommerceApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            EnviConfig.Config(this.Configuration);
             services.AddCors(options =>
             {
                 options.AddPolicy("MyAllowCorsPolicy",
@@ -43,6 +46,7 @@ namespace EcommerceApp
                         .AllowAnyHeader());
             });
             services.AddSignalR();
+            services.AddMvc();
             services.AddControllers();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -75,6 +79,8 @@ namespace EcommerceApp
                     }
                 });
             });
+            
+            services.AddScoped<AuthService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +94,7 @@ namespace EcommerceApp
                 
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ChatApp v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce App v1"));
             }
 
             app.UseHttpsRedirection();

@@ -12,7 +12,7 @@ namespace EcommerceApp.Models
     [Table("User")]
     public class User
     {
-        [Key] public string id { get; set; }
+        [Key] public long id { get; set; }
         public string username { get; set; }
         public string password { get; set; }
         public string fullname { get; set; }
@@ -20,6 +20,9 @@ namespace EcommerceApp.Models
         public string email { get; set; }
         public string address { get; set; }
         public string avatar { get; set; }
-        public int sex { get; set; }
+        public bool is_admin { get; set; }
+        
     }
+    
+    
 }
