@@ -7,7 +7,7 @@ namespace EcommerceApp.DTOs
 {
     public class AddProductRequest
     {
-        public string category_id { get; set; }
+        public long category_id { get; set; }
         public string name { get; set; }
         public string image { get; set; }
         public int price { get; set; }

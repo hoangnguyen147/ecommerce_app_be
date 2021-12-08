@@ -49,6 +49,21 @@ namespace EcommerceApp.Services
             return _listProduct;
         }
 
+        public List<Product> getProductByCategory(long category_id)
+        {
+            List<Product> _listProduct = context.Products
+                .Where(x => x.category_id.Equals(category_id))
+                .Select(x => new Product()
+                {
+                    id = x.id,
+                    category_id = x.category_id,
+                    name = x.name,
+                    price = x.price
+                }).ToList();
+
+            return _listProduct;
+        }
+
 
     }
 }

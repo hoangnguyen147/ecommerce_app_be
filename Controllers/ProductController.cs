@@ -62,6 +62,25 @@ namespace EcommerceApp.Controllers
                 return BadRequest(responseAPI);
             }
         }
+        
+        [Route("get-by-category/{category_id}")]
+        [HttpGet]
+        public IActionResult GetProductByCategory(long category_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                List<Product> list = this._productService.getProductByCategory(category_id);
+                responseAPI.Data = list;
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
 
 
 
