@@ -39,7 +39,6 @@ namespace EcommerceApp.Controllers
                 AccessToken accessToken = this._authService.Login(user);
                 responseAPI.Data = accessToken;
                 return Ok(responseAPI);
-                // return Ok(JsonConvert.SerializeObject(accessToken));
             }
             catch (Exception ex)
             {

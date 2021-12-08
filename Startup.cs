@@ -46,7 +46,11 @@ namespace EcommerceApp
                         .AllowAnyHeader());
             });
             services.AddSignalR();
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.RespectBrowserAcceptHeader = true; // false by default
+            });
+            
             services.AddControllers();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -81,6 +85,8 @@ namespace EcommerceApp
             });
             
             services.AddScoped<AuthService>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

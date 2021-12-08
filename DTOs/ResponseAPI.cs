@@ -13,16 +13,7 @@ namespace EcommerceApp.DTOs
         public string Message { get; set; }
 
         private object _data;
-        public object Data
-        {
-            get
-            {
-                return JsonConvert.SerializeObject(_data);
-            }
-            set
-            {
-                _data = value;
-            }
-        }
+        public object Data { get; set; }
+        
     }
 }
