@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using EcommerceApp.Models;
 using EcommerceApp.Utils;
 using EcommerceApp.DTOs;
+using Microsoft.EntityFrameworkCore;
 using AppContext = EcommerceApp.Models.AppContext;
 
 namespace EcommerceApp.Services
@@ -31,7 +32,8 @@ namespace EcommerceApp.Services
                 image = product.image,
                 price = product.price,
                 quantity = product.quantity,
-                vote = product.vote
+                vote = product.vote,
+                is_hot = false
             };
 
             this.context.Products.Add(item);
@@ -53,15 +55,46 @@ namespace EcommerceApp.Services
         {
             List<Product> _listProduct = context.Products
                 .Where(x => x.category_id.Equals(category_id))
-                .Select(x => new Product()
-                {
-                    id = x.id,
-                    category_id = x.category_id,
-                    name = x.name,
-                    price = x.price
-                }).ToList();
+                .Select(x => x).ToList();
 
             return _listProduct;
+        }
+
+        public Product updateProduct(AddProductRequest product, long product_id)
+        {
+            Product item = this.context.Products.FirstOrDefault(x => x.id == product_id);
+
+            if (item == null)
+            {
+                throw new ArgumentException("Không tìm thấy sản phẩm");
+            }
+
+            item.category_id = product.category_id;
+            item.name = product.name;
+            item.price = product.price;
+            item.quantity = product.quantity;
+            item.vote = product.vote;
+            item.image = product.image;
+
+            this.context.SaveChanges();
+            
+            return item;
+        }
+
+        public Product setProductHot(long id)
+        {
+            Product item = this.context.Products.FirstOrDefault(x => x.id == id);
+
+            if (item == null)
+            {
+                throw new ArgumentException("Không tìm thấy sản phẩm");
+            }
+
+            item.is_hot = true;
+
+            this.context.SaveChanges();
+
+            return item;
         }
 
 

@@ -81,8 +81,44 @@ namespace EcommerceApp.Controllers
                 return BadRequest(responseAPI);
             }
         }
-
-
-
+        
+        [Route("update-product/{product_id}")]
+        [HttpPut]
+        public IActionResult updateProduct(AddProductRequest data, long product_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                Product item = this._productService.updateProduct(data, product_id);
+                responseAPI.Data = item;
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        [Route("set-hot/{product_id}")]
+        [HttpPatch]
+        public IActionResult setProductIsHot(long product_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                Product item = this._productService.setProductHot(product_id);
+                responseAPI.Data = item;
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
     }
 }
