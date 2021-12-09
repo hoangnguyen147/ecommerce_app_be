@@ -96,6 +96,21 @@ namespace EcommerceApp.Services
 
             return item;
         }
+        
+        public void deleteProduct(long id)
+        {
+            Product item = this.context.Products.FirstOrDefault(x => x.id == id);
+
+            if (item == null)
+            {
+                throw new ArgumentException("Không tìm thấy sản phẩm");
+            }
+
+            context.Products.Remove(item);
+            
+            this.context.SaveChanges();
+
+        }
 
 
     }

@@ -22,7 +22,7 @@ namespace EcommerceApp.Services
             this.context = context;
         }
 
-        public AccessToken Login(User user)
+        public AccessToken Login(LoginRequest user)
         {
             System.Diagnostics.Debug.WriteLine(user.username);
             System.Diagnostics.Debug.WriteLine(user.password);
@@ -37,13 +37,9 @@ namespace EcommerceApp.Services
             context.SaveChanges();
 
             DateTime expirationDate = DateTime.Now.Date.AddMinutes(EnviConfig.ExpirationInMinutes);
-            System.Diagnostics.Debug.WriteLine("alo 2");
             long expiresAt = (long)(expirationDate - new DateTime(1970, 1, 1)).TotalSeconds;
             var tokenHandler = new JwtSecurityTokenHandler();
-            System.Diagnostics.Debug.WriteLine("alo 2.5");
-            System.Diagnostics.Debug.WriteLine("alo 2.55");
             var key = Encoding.ASCII.GetBytes(EnviConfig.SecretKey);
-            System.Diagnostics.Debug.WriteLine("alo 3");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -65,7 +61,7 @@ namespace EcommerceApp.Services
             };
         }
 
-        public void SignUp(User user)
+        public void SignUp(RegisterRequest user)
         {
             if (context.Users.Any(x => x.username.Equals(user.username)))
                 throw new ArgumentException("Tài khoản đã tồn tại");
@@ -77,7 +73,8 @@ namespace EcommerceApp.Services
                 email = user.email,
                 phone = user.phone,
                 password = DataHelper.SHA256Hash(user.username + "_" + user.password),
-                avatar = ""
+                avatar = user.avatar,
+                address = user.address
             };
 
             context.Users.Add(newUser);

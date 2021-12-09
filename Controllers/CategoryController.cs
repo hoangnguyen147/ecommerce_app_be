@@ -35,7 +35,10 @@ namespace EcommerceApp.Controllers
             try
             {
                 Category item = this._categoryService.addCategory(data);
-                return Ok(item);
+                responseAPI.Data = item;
+                responseAPI.Message = "Thêm nhóm sản phẩm thành công";
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
             }
             catch (Exception ex)
             {
@@ -53,6 +56,27 @@ namespace EcommerceApp.Controllers
             {
                 List<Category> list = this._categoryService.getAllCategory();
                 responseAPI.Data = list;
+                responseAPI.Message = "Lấy danh sách nhóm sản phẩm thành công";
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        [Route("update-category/{category_id}")]
+        [HttpPut]
+        public IActionResult updateProduct(AddCategoryRequest data, long category_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                Category item = this._categoryService.updateCategory(data, category_id);
+                responseAPI.Data = item;
+                responseAPI.Message = "Sửa nhóm sản phẩm thành công";
                 responseAPI.Status = 200;
                 return Ok(responseAPI);
             }
@@ -64,6 +88,24 @@ namespace EcommerceApp.Controllers
         }
         
         
+        [Route("{category_id}")]
+        [HttpDelete]
+        public IActionResult deleteProduct(long category_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                this._categoryService.deleteCategory(category_id);
+                responseAPI.Message = "Xóa nhóm sản phẩm thành công";
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
 
 
     }

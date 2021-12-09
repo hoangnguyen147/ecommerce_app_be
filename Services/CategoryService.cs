@@ -45,7 +45,40 @@ namespace EcommerceApp.Services
             
             return _listCategory;
         }
+        
+        public Category updateCategory(AddCategoryRequest data, long category_id)
+        {
+            Category item = this.context.Categories.FirstOrDefault(x => x.id == category_id);
 
+            if (item == null)
+            {
+                throw new ArgumentException("Không tìm thấy nhóm sản phẩm");
+            }
+
+            item.name = data.name;
+            item.description = data.description;
+            item.image = data.image;
+
+            return item;
+        }
+        
+        public void deleteCategory(long category_id)
+        {
+            Category item = this.context.Categories.FirstOrDefault(x => x.id == category_id);
+
+            if (item == null)
+            {
+                throw new ArgumentException("Không tìm thấy nhóm sản phẩm");
+            }
+
+            this.context.Categories.Remove(item);
+            
+            this.context.SaveChanges();
+
+
+        }
+        
+        
 
     }
 }

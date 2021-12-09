@@ -31,13 +31,15 @@ namespace EcommerceApp.Controllers
         }
         [Route("login")]
         [HttpPost]
-        public IActionResult Login(User user)
+        public IActionResult Login(LoginRequest user)
         {
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
                 AccessToken accessToken = this._authService.Login(user);
                 responseAPI.Data = accessToken;
+                responseAPI.Status = 200;
+                responseAPI.Message = "Đăng nhập thành công";
                 return Ok(responseAPI);
             }
             catch (Exception ex)
@@ -48,12 +50,14 @@ namespace EcommerceApp.Controllers
         }
           [Route("sign-up")]
         [HttpPost]
-        public IActionResult SignUp(User user)
+        public IActionResult SignUp(RegisterRequest user)
         {
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
                 this._authService.SignUp(user);
+                responseAPI.Status = 200;
+                responseAPI.Message = "Đăng ký thành công";
                 return Ok(responseAPI);
             }
             catch (Exception ex)
