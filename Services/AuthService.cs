@@ -22,7 +22,7 @@ namespace EcommerceApp.Services
             this.context = context;
         }
 
-        public AccessToken Login(LoginRequest user)
+        public AccessToken Login(LoginRequest user, bool forAdmin)
         {
             System.Diagnostics.Debug.WriteLine(user.username);
             System.Diagnostics.Debug.WriteLine(user.password);
@@ -34,6 +34,12 @@ namespace EcommerceApp.Services
             {
                 throw new ArgumentException("Sai thông tin đăng nhập");
             }
+
+            if (forAdmin && !userExist.is_admin)
+            {
+                throw new ArgumentException("Khong co quyen truy cap");
+            }
+            
             context.SaveChanges();
 
             DateTime expirationDate = DateTime.Now.Date.AddMinutes(EnviConfig.ExpirationInMinutes);

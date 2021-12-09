@@ -36,7 +36,7 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                AccessToken accessToken = this._authService.Login(user);
+                AccessToken accessToken = this._authService.Login(user, false);
                 responseAPI.Data = accessToken;
                 responseAPI.Status = 200;
                 responseAPI.Message = "Đăng nhập thành công";
@@ -48,6 +48,27 @@ namespace EcommerceApp.Controllers
                 return BadRequest(responseAPI);
             }
         }
+        
+        [Route("admin-login")]
+        [HttpPost]
+        public IActionResult AdminLogin(LoginRequest user)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                AccessToken accessToken = this._authService.Login(user, true);
+                responseAPI.Data = accessToken;
+                responseAPI.Status = 200;
+                responseAPI.Message = "Đăng nhập thành công";
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
           [Route("sign-up")]
         [HttpPost]
         public IActionResult SignUp(RegisterRequest user)
