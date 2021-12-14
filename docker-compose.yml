@@ -1,0 +1,23 @@
+version: '3.0'
+services:
+   db:
+     image: mysql:8.0.27
+     environment:
+       MYSQL_RANDOM_ROOT_PASSWORD: 1
+       MYSQL_DATABASE: e_app
+       MYSQL_USER: hoangnguyen147
+       MYSQL_PASSWORD: huyhoangPass123
+     volumes:
+       - dbdata:/var/lib/mysql
+       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
+     restart: always
+   accountownerapp:
+     depends_on:
+       - db
+     build:
+       context: .
+       dockerfile: ./Dockerfile
+     ports:
+       - "8080:5000"
+volumes:
+    dbdata:
