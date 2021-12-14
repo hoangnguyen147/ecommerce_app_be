@@ -48,6 +48,8 @@ namespace EcommerceApp.Services
         {
             List<Product> _listProduct = context.Products.ToList();
             
+            this.context.Database.Migrate();
+            
             return _listProduct;
         }
 
