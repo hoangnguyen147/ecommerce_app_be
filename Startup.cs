@@ -95,13 +95,17 @@ namespace EcommerceApp
             app.UseCors(
                 "MyAllowCorsPolicy"
             );
-            if (env.IsDevelopment())
+            /* if (env.IsDevelopment())
             {
                 
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce App v1"));
-            }
+            } */
+
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce App v1"));
 
             app.UseHttpsRedirection();
 
