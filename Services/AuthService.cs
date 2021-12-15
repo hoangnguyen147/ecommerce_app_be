@@ -27,7 +27,6 @@ namespace EcommerceApp.Services
             System.Diagnostics.Debug.WriteLine(user.username);
             System.Diagnostics.Debug.WriteLine(user.password);
             string passCheck = DataHelper.SHA256Hash(user.username + "_" + user.password);
-            // string passCheck = "5fa02eb08b4a56ab93e1c255076a0de41acb20ebcc3d9421938e9567c66c0266";
 
             User userExist = context.Users.Where(x => x.username.Equals(user.username) && x.password.Equals(passCheck)).FirstOrDefault();
             if (userExist == null)
@@ -38,6 +37,17 @@ namespace EcommerceApp.Services
             if (forAdmin && !userExist.is_admin)
             {
                 throw new ArgumentException("Khong co quyen truy cap");
+            }
+
+            string role;
+
+            if (userExist.is_admin == false)
+            {
+                role = "user";
+            }
+            else
+            {
+                role = "admin";
             }
             
             context.SaveChanges();
@@ -50,13 +60,14 @@ namespace EcommerceApp.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
               {
+                        new Claim(ClaimTypes.Sid, userExist.id.ToString()),
+                        new Claim(ClaimTypes.Role, role),
                         new Claim(ClaimTypes.Name, userExist.username),
                         new Claim(ClaimTypes.Expiration, expiresAt.ToString())
               }),
                 Expires = expirationDate,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             };
-            System.Diagnostics.Debug.WriteLine("alo 4");
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return new AccessToken
             {

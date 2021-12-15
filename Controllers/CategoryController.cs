@@ -34,7 +34,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                Category item = this._categoryService.addCategory(data);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Category item = this._categoryService.addCategory(data, user.role);
                 responseAPI.Data = item;
                 responseAPI.Message = "Thêm nhóm sản phẩm thành công";
                 responseAPI.Status = 200;
@@ -54,6 +55,7 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
                 List<Category> list = this._categoryService.getAllCategory();
                 responseAPI.Data = list;
                 responseAPI.Message = "Lấy danh sách nhóm sản phẩm thành công";
@@ -74,7 +76,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                Category item = this._categoryService.updateCategory(data, category_id);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Category item = this._categoryService.updateCategory(data, category_id, user.role);
                 responseAPI.Data = item;
                 responseAPI.Message = "Sửa nhóm sản phẩm thành công";
                 responseAPI.Status = 200;
@@ -95,7 +98,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                this._categoryService.deleteCategory(category_id);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                this._categoryService.deleteCategory(category_id, user.role);
                 responseAPI.Message = "Xóa nhóm sản phẩm thành công";
                 responseAPI.Status = 200;
                 return Ok(responseAPI);

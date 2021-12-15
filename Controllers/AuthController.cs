@@ -88,39 +88,7 @@ namespace EcommerceApp.Controllers
             }
         }
 
-        [HttpGet("img")]
-        public IActionResult DownloadImage(string key)
-        {
-            try
-            {
-                string path = Path.Combine(this._hostEnvironment.ContentRootPath, key);
-                var image = System.IO.File.OpenRead(path);
-                return File(image, "image/*");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("file")]
-        public IActionResult DownloadFile(string key)
-        {
-            ResponseAPI responseAPI = new ResponseAPI();
-            try
-            {
-                string pathTemplate = Path.Combine(this._hostEnvironment.ContentRootPath, key);
-                Stream stream = new FileStream(pathTemplate, FileMode.Open);
-                responseAPI.Data = "";
-                return File(stream, "application/octet-stream", key);
-
-            }
-            catch (Exception ex)
-            {
-                responseAPI.Message = ex.Message;
-                return BadRequest(responseAPI);
-            }
-        }
+        
 
     }
 }

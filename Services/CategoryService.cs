@@ -22,8 +22,12 @@ namespace EcommerceApp.Services
             this.context = context;
         }
 
-        public Category addCategory(AddCategoryRequest category)
+        public Category addCategory(AddCategoryRequest category, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Category item = new Category()
             {
                 name = category.name,
@@ -46,8 +50,12 @@ namespace EcommerceApp.Services
             return _listCategory;
         }
         
-        public Category updateCategory(AddCategoryRequest data, long category_id)
+        public Category updateCategory(AddCategoryRequest data, long category_id, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Category item = this.context.Categories.FirstOrDefault(x => x.id == category_id);
 
             if (item == null)
@@ -62,8 +70,12 @@ namespace EcommerceApp.Services
             return item;
         }
         
-        public void deleteCategory(long category_id)
+        public void deleteCategory(long category_id, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Category item = this.context.Categories.FirstOrDefault(x => x.id == category_id);
 
             if (item == null)

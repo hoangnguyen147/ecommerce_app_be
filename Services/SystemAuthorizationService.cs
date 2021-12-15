@@ -55,7 +55,7 @@ namespace EcommerceApp.Services
             }
         }
 
-        public static string GetCurrentUser(IHttpContextAccessor context)
+        public static CurrentUser GetCurrentUser(IHttpContextAccessor context)
         {
             try
             {
@@ -63,7 +63,17 @@ namespace EcommerceApp.Services
                 string tokenValue = token.Replace("Bearer", string.Empty).Trim();
                 ClaimsPrincipal claimsPrincipal = DecodeJWTToken(tokenValue, EnviConfig.SecretKey);
                 string userSession = claimsPrincipal.FindFirstValue(ClaimTypes.Sid);
-                return userSession;
+                string role = claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+                CurrentUser user = new CurrentUser
+                {
+                    id = userSession,
+                    role = role
+                };
+
+                System.Diagnostics.Debug.WriteLine(user.id);
+                System.Diagnostics.Debug.WriteLine(user.role);
+
+                return user;
             }
             catch
             {

@@ -34,7 +34,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                Product item = this._productService.addProduct(data);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Product item = this._productService.addProduct(data, user.role);
                 responseAPI.Data = item;
                 responseAPI.Message = "Thêm sản phẩm mới thành công";
                 responseAPI.Status = 200;
@@ -54,6 +55,7 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
                 List<Product> list = this._productService.getAllProduct();
                 responseAPI.Data = list;
                 responseAPI.Message = "Lấy danh sách sản phẩm thành công";
@@ -74,6 +76,7 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
                 List<Product> list = this._productService.getProductByCategory(category_id);
                 responseAPI.Data = list;
                 responseAPI.Status = 200;
@@ -94,7 +97,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                Product item = this._productService.updateProduct(data, product_id);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Product item = this._productService.updateProduct(data, product_id, user.role);
                 responseAPI.Data = item;
                 responseAPI.Status = 200;
                 responseAPI.Message = "Cập nhật sản phẩm thành công";
@@ -114,7 +118,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                Product item = this._productService.setProductHot(product_id);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Product item = this._productService.setProductHot(product_id, user.role);
                 responseAPI.Data = item;
                 responseAPI.Status = 200;
                 responseAPI.Message = "Cập nhật sản phẩm vào danh sách đang hot thành công";
@@ -134,7 +139,8 @@ namespace EcommerceApp.Controllers
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
-                this._productService.deleteProduct(product_id);
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                this._productService.deleteProduct(product_id, user.role);
                 responseAPI.Message = "Xóa sản phẩm thành công";
                 responseAPI.Status = 200;
                 return Ok(responseAPI);

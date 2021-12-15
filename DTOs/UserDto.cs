@@ -21,4 +21,10 @@ namespace EcommerceApp.DTOs
         public string address { get; set; }
         public string avatar { get; set; }
     }
+
+    public class CurrentUser
+    {
+        public string id { get; set; }
+        public string role { get; set; }
+    }
 }

@@ -64,7 +64,7 @@ namespace EcommerceApp
                 .EnableDetailedErrors());
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "ChatApp", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "EcommerceApp", Version = "v1"});
                 c.AddSecurityDefinition("Bearer",
                     new OpenApiSecurityScheme
                     {

@@ -23,8 +23,12 @@ namespace EcommerceApp.Services
             this.context = context;
         }
 
-        public Product addProduct(AddProductRequest product)
+        public Product addProduct(AddProductRequest product, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Product item = new Product()
             {
                 category_id = product.category_id,
@@ -62,8 +66,12 @@ namespace EcommerceApp.Services
             return _listProduct;
         }
 
-        public Product updateProduct(AddProductRequest product, long product_id)
+        public Product updateProduct(AddProductRequest product, long product_id, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Product item = this.context.Products.FirstOrDefault(x => x.id == product_id);
 
             if (item == null)
@@ -83,8 +91,12 @@ namespace EcommerceApp.Services
             return item;
         }
 
-        public Product setProductHot(long id)
+        public Product setProductHot(long id, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Product item = this.context.Products.FirstOrDefault(x => x.id == id);
 
             if (item == null)
@@ -92,15 +104,19 @@ namespace EcommerceApp.Services
                 throw new ArgumentException("Không tìm thấy sản phẩm");
             }
 
-            item.is_hot = true;
+            item.is_hot = !item.is_hot;
 
             this.context.SaveChanges();
 
             return item;
         }
         
-        public void deleteProduct(long id)
+        public void deleteProduct(long id, string userRole)
         {
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Lỗi xác thực");
+            }
             Product item = this.context.Products.FirstOrDefault(x => x.id == id);
 
             if (item == null)
