@@ -36,7 +36,8 @@ namespace EcommerceApp.Services
                 image = product.image,
                 price = product.price,
                 quantity = product.quantity,
-                vote = product.vote,
+                vote = 0,
+                overview = product.overview,
                 is_hot = false
             };
 
@@ -50,13 +51,7 @@ namespace EcommerceApp.Services
 
         public List<Product> getAllProduct()
         {
-            string a = "1";
-            long b = Convert.ToInt64(a);
-            System.Diagnostics.Debug.WriteLine("long nek");
-            System.Diagnostics.Debug.WriteLine(b);
             List<Product> _listProduct = context.Products.ToList();
-            
-            this.context.Database.Migrate();
             
             return _listProduct;
         }
@@ -87,7 +82,6 @@ namespace EcommerceApp.Services
             item.name = product.name;
             item.price = product.price;
             item.quantity = product.quantity;
-            item.vote = product.vote;
             item.image = product.image;
 
             this.context.SaveChanges();

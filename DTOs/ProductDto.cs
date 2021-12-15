@@ -12,6 +12,6 @@ namespace EcommerceApp.DTOs
         public string image { get; set; }
         public int price { get; set; }
         public int quantity { get; set; }
-        public float vote { get; set; }
+        public string overview { get; set; }
     }
 }

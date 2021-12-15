@@ -23,101 +23,70 @@ namespace EcommerceApp.Services
             this.context = context;
         }
 
-        public Comment addComment(AddCommentRequest data, string userId)
+        public Comment addNewComment(AddCommentRequest data, string userId)
         {
             Product product = context.Products.FirstOrDefault(x => x.id == data.product_id);
+            if (product == null)
+            {
+                throw new ArgumentException("Không tìm thấy sản phẩm");
+            }
+
+            int count = product.count_vote;
+            float newVote = ((product.vote * count) + data.vote) / (count + 1);
+            product.vote = newVote;
+            System.Diagnostics.Debug.WriteLine(newVote);
+            product.count_vote = count + 1;
+            DateTime dateNow = DateTime.Now;
+            
             Comment item = new Comment()
             {
                 content = data.content,
                 product_id = data.product_id,
                 user_id = Convert.ToInt64(userId),
-                vote = data.vote
+                vote = data.vote,
+                created_at = dateNow,
             };
-
-            return item;
-
-        }
-
-        public List<Product> getAllProduct()
-        {
-            List<Product> _listProduct = context.Products.ToList();
             
-            this.context.Database.Migrate();
-            
-            return _listProduct;
-        }
-
-        public List<Product> getProductByCategory(long category_id)
-        {
-            List<Product> _listProduct = context.Products
-                .Where(x => x.category_id.Equals(category_id))
-                .Select(x => x).ToList();
-
-            return _listProduct;
-        }
-
-        public Product updateProduct(AddProductRequest product, long product_id, string userRole)
-        {
-            if (userRole != "admin")
-            {
-                throw new ArgumentException("Lỗi xác thực");
-            }
-            Product item = this.context.Products.FirstOrDefault(x => x.id == product_id);
-
-            if (item == null)
-            {
-                throw new ArgumentException("Không tìm thấy sản phẩm");
-            }
-
-            item.category_id = product.category_id;
-            item.name = product.name;
-            item.price = product.price;
-            item.quantity = product.quantity;
-            item.vote = product.vote;
-            item.image = product.image;
-
-            this.context.SaveChanges();
-            
-            return item;
-        }
-
-        public Product setProductHot(long id, string userRole)
-        {
-            if (userRole != "admin")
-            {
-                throw new ArgumentException("Lỗi xác thực");
-            }
-            Product item = this.context.Products.FirstOrDefault(x => x.id == id);
-
-            if (item == null)
-            {
-                throw new ArgumentException("Không tìm thấy sản phẩm");
-            }
-
-            item.is_hot = !item.is_hot;
+            this.context.Comments.Add(item);
 
             this.context.SaveChanges();
 
             return item;
+
         }
-        
-        public void deleteProduct(long id, string userRole)
+
+        public List<CommentDto> getAllCommentOfProduct(long product_id)
         {
-            if (userRole != "admin")
-            {
-                throw new ArgumentException("Lỗi xác thực");
-            }
-            Product item = this.context.Products.FirstOrDefault(x => x.id == id);
+            List<CommentDto> _listComment = context.Comments
+                .Join(context.Users,
+                    c => c.user_id,
+                    u => u.id,
+                    (c, u) => new {Comments = c, Users = u})
+                .Where(x => x.Comments.product_id == product_id)
+                .Select(x => new CommentDto()
+                {
+                    content = x.Comments.content,
+                    product_id = x.Comments.product_id,
+                    vote = x.Comments.vote,
+                    avatar = x.Users.avatar,
+                    user_id = x.Users.id,
+                    fullname = x.Users.fullname,
+                    username = x.Users.username,
+                }).ToList();
 
-            if (item == null)
-            {
-                throw new ArgumentException("Không tìm thấy sản phẩm");
-            }
+            // var comments = from c in context.Comments
+            //     join u in context.Users
+            //         on c.user_id equals u.id
+            //     select new
+            //     {
+            //         fullname = u.fullname,
+            //         username = u.username,
+            //         content = c.content,
+            //
+            //     };
 
-            context.Products.Remove(item);
-            
-            this.context.SaveChanges();
 
+            return _listComment;
         }
 
 

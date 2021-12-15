@@ -11,4 +11,15 @@ namespace EcommerceApp.DTOs
         public long product_id { get; set; }
         public float vote { get; set; }
     }
+
+    public class CommentDto
+    {
+        public string content { get; set; }
+        public long product_id { get; set; }
+        public float vote { get; set; }
+        public string username { get; set; }
+        public string fullname { get; set; }
+        public long user_id { get; set; }
+        public string avatar { get; set; }
+    }
 }
