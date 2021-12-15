@@ -18,6 +18,8 @@ namespace EcommerceApp.Models
         public string image { get; set; }
         public int price { get; set; }
         public int quantity { get; set; }
+        public string overview { get; set; }
+        public int count_vote { get; set; }
         public float vote { get; set; }
         public bool is_hot { get; set; }
         

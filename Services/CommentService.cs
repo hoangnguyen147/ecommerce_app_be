@@ -14,35 +14,25 @@ using AppContext = EcommerceApp.Models.AppContext;
 
 namespace EcommerceApp.Services
 {
-    public class ProductService
+    public class CommentService
     {
         protected readonly AppContext context;
 
-        public ProductService(AppContext context)
+        public CommentService(AppContext context)
         {
             this.context = context;
         }
 
-        public Product addProduct(AddProductRequest product, string userRole)
+        public Comment addComment(AddCommentRequest data, string userId)
         {
-            if (userRole != "admin")
+            Product product = context.Products.FirstOrDefault(x => x.id == data.product_id);
+            Comment item = new Comment()
             {
-                throw new ArgumentException("Lỗi xác thực");
-            }
-            Product item = new Product()
-            {
-                category_id = product.category_id,
-                name = product.name,
-                image = product.image,
-                price = product.price,
-                quantity = product.quantity,
-                vote = product.vote,
-                is_hot = false
+                content = data.content,
+                product_id = data.product_id,
+                user_id = Convert.ToInt64(userId),
+                vote = data.vote
             };
-
-            this.context.Products.Add(item);
-
-            this.context.SaveChanges();
 
             return item;
 
@@ -50,10 +40,6 @@ namespace EcommerceApp.Services
 
         public List<Product> getAllProduct()
         {
-            string a = "1";
-            long b = Convert.ToInt64(a);
-            System.Diagnostics.Debug.WriteLine("long nek");
-            System.Diagnostics.Debug.WriteLine(b);
             List<Product> _listProduct = context.Products.ToList();
             
             this.context.Database.Migrate();

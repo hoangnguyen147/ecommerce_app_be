@@ -17,6 +17,7 @@ namespace EcommerceApp.Models
         public long product_id { get; set; }
         public long user_id { get; set; }
         public float vote { get; set; }
+        public DateTime created_at { get; set; }
         [ForeignKey("user_id")]
         public virtual User UserCreate { get; set; }
         [ForeignKey("product_id")]
