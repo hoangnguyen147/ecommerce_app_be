@@ -24,8 +24,6 @@ namespace EcommerceApp.Services
 
         public AccessToken Login(LoginRequest user, bool forAdmin)
         {
-            System.Diagnostics.Debug.WriteLine(user.username);
-            System.Diagnostics.Debug.WriteLine(user.password);
             string passCheck = DataHelper.SHA256Hash(user.username + "_" + user.password);
 
             User userExist = context.Users.Where(x => x.username.Equals(user.username) && x.password.Equals(passCheck)).FirstOrDefault();
@@ -96,6 +94,47 @@ namespace EcommerceApp.Services
             };
 
             context.Users.Add(newUser);
+            context.SaveChanges();
+        }
+
+        public void changePassword(ChangePasswordRequest data, string user_id)
+        {
+            User user = context.Users.FirstOrDefault(x => x.id.ToString() == user_id);
+            if (user == null)
+            {
+                throw new ArgumentException("Tài khoản không tồn tại");
+            }
+            string passCheck = DataHelper.SHA256Hash(user.username + "_" + data.old_password);
+
+            if (passCheck != user.password)
+            {
+                throw new ArgumentException("Sai mật khẩu");
+            }
+            
+            string newPassword = DataHelper.SHA256Hash(user.username + "_" + data.new_password);
+
+            user.password = newPassword;
+
+            context.SaveChanges();
+        }
+        
+        public void adminResetPassword(string reseted_username, string new_password, string role)
+        {
+            if (role != "admin")
+            {
+                throw new ArgumentException("Chỉ dành cho admin");
+            }
+            
+            User user = context.Users.FirstOrDefault(x => x.username == reseted_username);
+            if (user == null)
+            {
+                throw new ArgumentException("Tài khoản không tồn tại");
+            }
+            
+            string newPassword = DataHelper.SHA256Hash(user.username + "_" + new_password);
+
+            user.password = newPassword;
+
             context.SaveChanges();
         }
         

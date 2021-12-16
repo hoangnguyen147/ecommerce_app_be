@@ -69,7 +69,7 @@ namespace EcommerceApp.Controllers
             }
         }
         
-          [Route("sign-up")]
+        [Route("sign-up")]
         [HttpPost]
         public IActionResult SignUp(RegisterRequest user)
         {
@@ -79,6 +79,46 @@ namespace EcommerceApp.Controllers
                 this._authService.SignUp(user);
                 responseAPI.Status = 200;
                 responseAPI.Message = "Đăng ký thành công";
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        [Route("change-password")]
+        [HttpPatch]
+        public IActionResult UserChangePassword(ChangePasswordRequest data)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                this._authService.changePassword(data, user.id);
+                responseAPI.Status = 200;
+                responseAPI.Message = "Đổi mật khẩu thành công";
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        [Route("admin-reset-password")]
+        [HttpPatch]
+        public IActionResult AdminResetPassword(string username, string new_password)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                this._authService.adminResetPassword(username, new_password, user.role);
+                responseAPI.Status = 200;
+                responseAPI.Message = "Đặt lại mật khẩu thành công";
                 return Ok(responseAPI);
             }
             catch (Exception ex)
