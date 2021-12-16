@@ -16,8 +16,6 @@ namespace EcommerceApp.Models
         public long user_id { get; set; }
         public string status { get; set; }
         public DateTime created_at { get; set; }
-        public string message_from_user { get; set; }
-        public string message_from_shop { get; set; }
         [ForeignKey("user_id")]
         public virtual User UserCreate { get; set; }
     }

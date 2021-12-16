@@ -53,6 +53,11 @@ namespace EcommerceApp
             
             services.AddControllers();
             
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -89,6 +94,7 @@ namespace EcommerceApp
             services.AddScoped<CategoryService>();
             services.AddScoped<CommentService>();
             services.AddScoped<CartService>();
+            services.AddScoped<OrderService>();
 
 
         }

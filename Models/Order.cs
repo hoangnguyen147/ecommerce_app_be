@@ -9,7 +9,7 @@ using System.Web;
 namespace EcommerceApp.Models
 {
 
-    [Table("Order")]
+    [Table("Orders")]
     public class Order
     {
         [Key] public long id { get; set; }
@@ -30,7 +30,6 @@ namespace EcommerceApp.Models
         public long order_id { get; set; }
         public long product_id { get; set; }
         public int quantity { get; set; }
-        public int price { get; set; }
         [ForeignKey("order_id")]
         public virtual Order Order { get; set; }
         [ForeignKey("product_id")]

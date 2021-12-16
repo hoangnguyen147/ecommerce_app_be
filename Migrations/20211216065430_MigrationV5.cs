@@ -8,8 +8,16 @@ namespace EcommerceApp.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "message_from_shop",
+                table: "Cart");
+
+            migrationBuilder.DropColumn(
+                name: "message_from_user",
+                table: "Cart");
+
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Orders",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
@@ -23,9 +31,9 @@ namespace EcommerceApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.id);
+                    table.PrimaryKey("PK_Orders", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Order_User_user_id",
+                        name: "FK_Orders_User_user_id",
                         column: x => x.user_id,
                         principalTable: "User",
                         principalColumn: "id",
@@ -41,16 +49,15 @@ namespace EcommerceApp.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     order_id = table.Column<long>(type: "bigint", nullable: false),
                     product_id = table.Column<long>(type: "bigint", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    price = table.Column<int>(type: "int", nullable: false)
+                    quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItem", x => x.id);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Order_order_id",
+                        name: "FK_OrderItem_Orders_order_id",
                         column: x => x.order_id,
-                        principalTable: "Order",
+                        principalTable: "Orders",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -63,11 +70,6 @@ namespace EcommerceApp.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_user_id",
-                table: "Order",
-                column: "user_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_order_id",
                 table: "OrderItem",
                 column: "order_id");
@@ -76,6 +78,11 @@ namespace EcommerceApp.Migrations
                 name: "IX_OrderItem_product_id",
                 table: "OrderItem",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_user_id",
+                table: "Orders",
+                column: "user_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -84,7 +91,21 @@ namespace EcommerceApp.Migrations
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Orders");
+
+            migrationBuilder.AddColumn<string>(
+                name: "message_from_shop",
+                table: "Cart",
+                type: "longtext",
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.AddColumn<string>(
+                name: "message_from_user",
+                table: "Cart",
+                type: "longtext",
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
     }
 }

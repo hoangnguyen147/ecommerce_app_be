@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using AppContext = EcommerceApp.Models.AppContext;
 
-
 namespace EcommerceApp.Migrations
 {
     [DbContext(typeof(AppContext))]
-    [Migration("20211216040318_MigrationV5")]
+    [Migration("20211216065430_MigrationV5")]
     partial class MigrationV5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,12 +28,6 @@ namespace EcommerceApp.Migrations
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("message_from_shop")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("message_from_user")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("status")
                         .HasColumnType("longtext");
@@ -148,7 +141,7 @@ namespace EcommerceApp.Migrations
 
                     b.HasIndex("user_id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("EcommerceApp.Models.OrderItem", b =>
@@ -159,9 +152,6 @@ namespace EcommerceApp.Migrations
 
                     b.Property<long>("order_id")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("price")
-                        .HasColumnType("int");
 
                     b.Property<long>("product_id")
                         .HasColumnType("bigint");

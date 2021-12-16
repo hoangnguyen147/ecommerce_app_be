@@ -27,7 +27,7 @@ namespace EcommerceApp.Services
         {
             if (userRole != "admin")
             {
-                throw new ArgumentException("Lỗi xác thực");
+                throw new ArgumentException("Chỉ dành cho admin");
             }
             Product item = new Product()
             {
@@ -69,7 +69,7 @@ namespace EcommerceApp.Services
         {
             if (userRole != "admin")
             {
-                throw new ArgumentException("Lỗi xác thực");
+                throw new ArgumentException("Chỉ dành cho admin");
             }
             Product item = this.context.Products.FirstOrDefault(x => x.id == product_id);
 
@@ -93,7 +93,7 @@ namespace EcommerceApp.Services
         {
             if (userRole != "admin")
             {
-                throw new ArgumentException("Lỗi xác thực");
+                throw new ArgumentException("Chỉ dành cho admin");
             }
             Product item = this.context.Products.FirstOrDefault(x => x.id == id);
 
@@ -113,7 +113,7 @@ namespace EcommerceApp.Services
         {
             if (userRole != "admin")
             {
-                throw new ArgumentException("Lỗi xác thực");
+                throw new ArgumentException("Chỉ dành cho admin");
             }
             Product item = this.context.Products.FirstOrDefault(x => x.id == id);
 
