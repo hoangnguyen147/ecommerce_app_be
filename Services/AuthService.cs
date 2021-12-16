@@ -91,7 +91,8 @@ namespace EcommerceApp.Services
                 phone = user.phone,
                 password = DataHelper.SHA256Hash(user.username + "_" + user.password),
                 avatar = user.avatar,
-                address = user.address
+                address = user.address,
+                finance = 0,
             };
 
             context.Users.Add(newUser);

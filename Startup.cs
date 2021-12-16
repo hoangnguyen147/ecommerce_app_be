@@ -88,6 +88,8 @@ namespace EcommerceApp
             services.AddScoped<ProductService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<CommentService>();
+            services.AddScoped<CartService>();
+
 
         }
 

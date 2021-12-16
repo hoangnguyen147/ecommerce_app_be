@@ -3,15 +3,17 @@ using System;
 using EcommerceApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using AppContext = EcommerceApp.Models.AppContext;
 
 namespace EcommerceApp.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20211216035530_MigrationV4")]
+    partial class MigrationV4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,58 +123,6 @@ namespace EcommerceApp.Migrations
                     b.HasIndex("user_id");
 
                     b.ToTable("Comment");
-                });
-
-            modelBuilder.Entity("EcommerceApp.Models.Order", b =>
-                {
-                    b.Property<long>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("message")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("status")
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("user_id")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("user_id");
-
-                    b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("EcommerceApp.Models.OrderItem", b =>
-                {
-                    b.Property<long>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("order_id")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("price")
-                        .HasColumnType("int");
-
-                    b.Property<long>("product_id")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("order_id");
-
-                    b.HasIndex("product_id");
-
-                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("EcommerceApp.Models.Product", b =>
@@ -302,36 +252,6 @@ namespace EcommerceApp.Migrations
                     b.Navigation("UserCreate");
                 });
 
-            modelBuilder.Entity("EcommerceApp.Models.Order", b =>
-                {
-                    b.HasOne("EcommerceApp.Models.User", "UserCreate")
-                        .WithMany()
-                        .HasForeignKey("user_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserCreate");
-                });
-
-            modelBuilder.Entity("EcommerceApp.Models.OrderItem", b =>
-                {
-                    b.HasOne("EcommerceApp.Models.Order", "Order")
-                        .WithMany("Items")
-                        .HasForeignKey("order_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EcommerceApp.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("product_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("EcommerceApp.Models.Product", b =>
                 {
                     b.HasOne("EcommerceApp.Models.Category", "Category")
@@ -341,11 +261,6 @@ namespace EcommerceApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("EcommerceApp.Models.Order", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
