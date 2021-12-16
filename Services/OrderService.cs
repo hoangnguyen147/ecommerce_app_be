@@ -48,15 +48,43 @@ namespace EcommerceApp.Services
                 product_id = x.product_id,
                 quantity = x.quantity,
             }).ToList();
-
+            
             newOrder.Items = listItems;
 
             this.context.Orders.Add(newOrder);
             this.context.SaveChanges();
-
+            
             return newOrder;
 
 
+        }
+
+        public void orderFail(Order order)
+        {
+            OrderItem[] list = order.Items.ToArray();
+            for (int i = 0; i < list.Length; i++)
+            {
+                list[i].Product.quantity +=  list[i].quantity;
+            }
+
+            this.context.SaveChanges();
+        }
+        
+        public void orderDone(Order order)
+        {
+            OrderItem[] list = order.Items.ToArray();
+            for (int i = 0; i < list.Length; i++)
+            {
+                int qtyAfter = list[i].Product.quantity - list[i].quantity;
+                if (qtyAfter < 0)
+                {
+                    throw new ArgumentException("Không đủ hàng");
+                }
+
+                list[i].Product.quantity = qtyAfter;
+            }
+
+            this.context.SaveChanges();
         }
 
         public List<Order> getAllOrder(string userRole)
@@ -79,7 +107,7 @@ namespace EcommerceApp.Services
             return listOrder;
         }
 
-        public Order changeOrderStatus(string status, long order_id, string userRole)
+        public Order setOrderIsDelivering(long order_id, string userRole)
         {
             OrderStatus _status = new OrderStatus();
 
@@ -97,14 +125,62 @@ namespace EcommerceApp.Services
             {
                 throw new ArgumentException("Đơn hàng này đã bị hủy bỏ trước đó");
             }
+            
+            
+            order.status = _status.delivering;
 
-            if (status != _status.pending && status != _status.delivering && status != _status.success &&
-                status != _status.reject)
+            this.context.SaveChanges();
+            
+            return order;
+        }
+        
+        public Order adminRejectOrder(long order_id, string userRole)
+        {
+            OrderStatus _status = new OrderStatus();
+
+            if (userRole != "admin")
             {
-                throw new ArgumentException("Tình trạng đơn hàng không hợp lệ");
+                throw new ArgumentException("Chỉ dành cho admin");
+            }
+            Order order = this.context.Orders.FirstOrDefault(x => x.id == order_id);
+            if (order == null)
+            {
+                throw new ArgumentException("Đơn hàng không tồn tại");
+            }
+
+            if (order.status == _status.cancel)
+            {
+                throw new ArgumentException("Đơn hàng này đã bị hủy bỏ trước đó");
             }
             
-            order.status = status;
+            
+            order.status = _status.reject;
+            
+            this.orderFail(order);
+
+            this.context.SaveChanges();
+            
+            return order;
+        }
+        
+        public Order orderSuccess(long order_id, string userRole)
+        {
+            OrderStatus _status = new OrderStatus();
+
+            if (userRole != "admin")
+            {
+                throw new ArgumentException("Chỉ dành cho admin");
+            }
+            Order order = this.context.Orders.FirstOrDefault(x => x.id == order_id);
+            if (order == null)
+            {
+                throw new ArgumentException("Đơn hàng không tồn tại");
+            }
+
+
+            order.status = _status.success;
+            
+            this.orderDone(order);
 
             this.context.SaveChanges();
             
@@ -127,6 +203,8 @@ namespace EcommerceApp.Services
             }
             
             order.status = _status.cancel;
+            
+            this.orderFail(order);
 
             this.context.SaveChanges();
             

@@ -90,15 +90,15 @@ namespace EcommerceApp.Controllers
             }
         }
         
-        [Route("change-status/{order_id}")]
+        [Route("set-order-is-delivering/{order_id}")]
         [HttpPatch]
-        public IActionResult ChangeOrderStatus(string status, long order_id)
+        public IActionResult SetOrderDelivering(long order_id)
         {
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
                 CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
-                Order item = this._orderService.changeOrderStatus(status, order_id, user.role);
+                Order item = this._orderService.setOrderIsDelivering(order_id, user.role);
                 responseAPI.Data = item;
                 responseAPI.Message = "Cập nhật trạng thái đơn hàng thành công";
                 responseAPI.Status = 200;
@@ -111,9 +111,53 @@ namespace EcommerceApp.Controllers
             }
         }
         
+        [Route("admin-reject-order/{order_id}")]
+        [HttpPatch]
+        public IActionResult AdminRejectOrder(long order_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Order item = this._orderService.adminRejectOrder(order_id, user.role);
+                responseAPI.Data = item;
+                responseAPI.Message = "Cập nhật trạng thái đơn hàng thành công";
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        [Route("admin-tick-order-success/{order_id}")]
+        [HttpPatch]
+        public IActionResult OrderSuccess(long order_id)
+        {
+            ResponseAPI responseAPI = new ResponseAPI();
+            try
+            {
+                CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
+                Order item = this._orderService.orderSuccess(order_id, user.role);
+                responseAPI.Data = item;
+                responseAPI.Message = "Cập nhật trạng thái đơn hàng thành công";
+                responseAPI.Status = 200;
+                return Ok(responseAPI);
+            }
+            catch (Exception ex)
+            {
+                responseAPI.Message = ex.Message;
+                return BadRequest(responseAPI);
+            }
+        }
+        
+        
+        
         [Route("user-cancel-order/{order_id}")]
         [HttpPatch]
-        public IActionResult userCancelOrder(long order_id)
+        public IActionResult UserCancelOrder(long order_id)
         {
             ResponseAPI responseAPI = new ResponseAPI();
             try
