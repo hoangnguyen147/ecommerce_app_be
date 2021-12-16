@@ -48,7 +48,7 @@ namespace EcommerceApp.Controllers
             }
         }
         
-        [Route("")]
+        [Route("get-all-product")]
         [HttpGet]
         public IActionResult GetAllProduct()
         {
