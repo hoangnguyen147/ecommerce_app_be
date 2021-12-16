@@ -18,7 +18,6 @@ namespace EcommerceApp.Services
     {
         protected readonly AppContext context;
         
-        private OrderStatus _status;
 
         public OrderService(AppContext context)
         {
@@ -28,6 +27,8 @@ namespace EcommerceApp.Services
         public Order order(OrderRequest data, string userId)
         {
             DateTime dateNow = DateTime.Now;
+
+            OrderStatus _status = new OrderStatus();
             
             Order newOrder = new Order()
             {
@@ -80,6 +81,8 @@ namespace EcommerceApp.Services
 
         public Order changeOrderStatus(string status, long order_id, string userRole)
         {
+            OrderStatus _status = new OrderStatus();
+
             if (userRole != "admin")
             {
                 throw new ArgumentException("Chỉ dành cho admin");
@@ -88,6 +91,11 @@ namespace EcommerceApp.Services
             if (order == null)
             {
                 throw new ArgumentException("Đơn hàng không tồn tại");
+            }
+
+            if (order.status == _status.cancel)
+            {
+                throw new ArgumentException("Đơn hàng này đã bị hủy bỏ trước đó");
             }
 
             if (status != _status.pending && status != _status.delivering && status != _status.success &&
@@ -105,6 +113,8 @@ namespace EcommerceApp.Services
         
         public Order userCancelOrder(long order_id, string userId)
         {
+            OrderStatus _status = new OrderStatus();
+
             Order order = this.context.Orders.FirstOrDefault(x => x.id == order_id);
             if (order == null)
             {
