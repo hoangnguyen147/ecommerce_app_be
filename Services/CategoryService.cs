@@ -67,6 +67,8 @@ namespace EcommerceApp.Services
             item.description = data.description;
             item.image = data.image;
 
+            context.SaveChanges();
+
             return item;
         }
         
@@ -83,9 +85,9 @@ namespace EcommerceApp.Services
                 throw new ArgumentException("Không tìm thấy nhóm sản phẩm");
             }
 
-            this.context.Categories.Remove(item);
+            context.Categories.Remove(item);
             
-            this.context.SaveChanges();
+            context.SaveChanges();
 
 
         }
