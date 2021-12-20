@@ -118,8 +118,10 @@ namespace EcommerceApp.Services
             context.SaveChanges();
         }
         
-        public void adminResetPassword(string reseted_username, string new_password, string role)
+        public void adminResetPassword(ResetPasswordRequest data, string role)
         {
+            string reseted_username = data.username;
+            string new_password = data.new_password;
             if (role != "admin")
             {
                 throw new ArgumentException("Chỉ dành cho admin");
@@ -137,7 +139,5 @@ namespace EcommerceApp.Services
 
             context.SaveChanges();
         }
-        
-        
     }
 }

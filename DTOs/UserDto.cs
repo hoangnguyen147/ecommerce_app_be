@@ -55,4 +55,10 @@ namespace EcommerceApp.DTOs
         public string address { get; set; }
         public string avatar { get; set; }
     }
+
+    public class ResetPasswordRequest
+    {
+        public string username { get; set; }
+        public string new_password { get; set; }
+    }
 }

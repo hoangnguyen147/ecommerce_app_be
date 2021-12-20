@@ -72,6 +72,7 @@ namespace EcommerceApp.Services
                     user_id = x.Users.id,
                     fullname = x.Users.fullname,
                     username = x.Users.username,
+                    created_at = x.Comments.created_at
                 }).ToList();
 
             // var comments = from c in context.Comments

@@ -110,13 +110,13 @@ namespace EcommerceApp.Controllers
         
         [Route("admin-reset-password")]
         [HttpPatch]
-        public IActionResult AdminResetPassword(string username, string new_password)
+        public IActionResult AdminResetPassword(ResetPasswordRequest data)
         {
             ResponseAPI responseAPI = new ResponseAPI();
             try
             {
                 CurrentUser user = SystemAuthorizationService.GetCurrentUser(this._contextAccessor);
-                this._authService.adminResetPassword(username, new_password, user.role);
+                this._authService.adminResetPassword(data, user.role);
                 responseAPI.Status = 200;
                 responseAPI.Message = "Đặt lại mật khẩu thành công";
                 return Ok(responseAPI);
